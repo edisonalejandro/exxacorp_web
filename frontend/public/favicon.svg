@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <rect width="100" height="100" rx="20" fill="#0d0b14" />
+  <polygon points="88,50 68,15.7 32,15.7 12,50 32,84.3 68,84.3" fill="none" stroke="#ffffff" stroke-width="4" />
+  <g id="favicon-mark">
+    <ellipse cx="50" cy="40" rx="14" ry="11.5" fill="currentColor" />
+    <path d="M37,51 C28,58 21,67 20,79 C20,82 22,84 24,86" stroke="currentColor" stroke-width="5" fill="none" stroke-linecap="round" />
+    <path d="M43,52 C38,61 34,71 35,82" stroke="currentColor" stroke-width="5" fill="none" stroke-linecap="round" />
+    <path d="M57,52 C62,61 66,71 65,82" stroke="currentColor" stroke-width="5" fill="none" stroke-linecap="round" />
+    <path d="M63,51 C72,58 79,67 80,79 C80,82 78,84 76,86" stroke="currentColor" stroke-width="5" fill="none" stroke-linecap="round" />
+  </g>
+  <clipPath id="favicon-right-half">
+    <rect x="50" y="0" width="50" height="100" />
+  </clipPath>
+  <use href="#favicon-mark" color="#4c1d95" />
+  <use href="#favicon-mark" color="#a78bfa" clip-path="url(#favicon-right-half)" />
+</svg>

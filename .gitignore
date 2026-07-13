@@ -1,0 +1,16 @@
+# Dependencies / build output
+node_modules/
+dist/
+target/
+.angular/
+
+# Env / secrets
+.env
+!.env.example
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log

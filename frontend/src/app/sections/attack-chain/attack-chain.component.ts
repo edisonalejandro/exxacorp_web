@@ -1,10 +1,7 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, OnDestroy, computed, inject, signal, viewChild } from '@angular/core';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import type { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { I18nService } from '../../core/i18n.service';
-import { AttackChainScene } from './attack-chain-scene';
-
-gsap.registerPlugin(ScrollTrigger);
+import type { AttackChainScene } from './attack-chain-scene';
 
 function clamp01(x: number): number {
   return Math.min(1, Math.max(0, x));
@@ -95,10 +92,17 @@ export class AttackChainComponent implements AfterViewInit, OnDestroy {
   private scrollTrigger?: ScrollTrigger;
   private resizeObserver?: ResizeObserver;
 
-  ngAfterViewInit(): void {
+  async ngAfterViewInit(): Promise<void> {
     const canvas = this.canvasRef().nativeElement;
     const labelsEl = this.labelsRef().nativeElement;
     const parent = canvas.parentElement!;
+
+    const [{ gsap }, { ScrollTrigger }, { AttackChainScene }] = await Promise.all([
+      import('gsap'),
+      import('gsap/ScrollTrigger'),
+      import('./attack-chain-scene'),
+    ]);
+    gsap.registerPlugin(ScrollTrigger);
 
     this.scene = new AttackChainScene(canvas, labelsEl, this.i18n.content().attackChain.categories);
 

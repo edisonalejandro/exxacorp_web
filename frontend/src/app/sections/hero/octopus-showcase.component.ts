@@ -10,7 +10,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { I18nService } from '../../core/i18n.service';
-import { Octopus3DScene } from './octopus-3d-scene';
+import type { Octopus3DScene } from './octopus-3d-scene';
 
 interface Hotspot {
   serviceIndex: number;
@@ -90,10 +90,11 @@ export class OctopusShowcaseComponent implements AfterViewInit, OnDestroy {
   private scene?: Octopus3DScene;
   private resizeObserver?: ResizeObserver;
 
-  ngAfterViewInit(): void {
+  async ngAfterViewInit(): Promise<void> {
     const canvas = this.canvasRef().nativeElement;
     const container = canvas.parentElement!;
 
+    const { Octopus3DScene } = await import('./octopus-3d-scene');
     this.scene = new Octopus3DScene(canvas);
     this.scene.onHotspots((positions) => this.hotspotPositions.set(positions));
 

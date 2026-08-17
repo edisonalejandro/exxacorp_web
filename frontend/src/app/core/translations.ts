@@ -225,7 +225,7 @@ const es: SiteContent = {
       error: 'No pudimos enviar el mensaje. Probá de nuevo o escribinos directamente.',
     },
     directLabel: 'O escribinos directo a',
-    email: 'contacto@exxacorp.io',
+    email: 'contacto@exxacorp.com',
   },
   footer: {
     tagline: 'Ciberseguridad ofensiva y defensiva para empresas que no quieren enterarse tarde.',
@@ -386,7 +386,7 @@ const en: SiteContent = {
       error: "We couldn't send your message. Please try again or email us directly.",
     },
     directLabel: 'Or email us directly at',
-    email: 'contacto@exxacorp.io',
+    email: 'contacto@exxacorp.com',
   },
   footer: {
     tagline: 'Offensive and defensive cybersecurity for companies that refuse to find out the hard way.',

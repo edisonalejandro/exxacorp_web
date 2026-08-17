@@ -87,7 +87,7 @@ const es: SiteContent = {
   },
   hero: {
     eyebrow: 'Ciberseguridad ofensiva & defensiva',
-    title: 'Blindamos tu infraestructura antes de que alguien más encuentre el fallo.',
+    title: 'Blindamos tu infraestructura antes de que alguien más encuentre la vulnerabilidad.',
     highlight: 'antes de que alguien más',
     subtitle:
       'Exxacorp es un equipo de especialistas en hardening, pentesting y cumplimiento que reduce tu superficie de ataque real — no solo la que aparece en un reporte.',
@@ -203,7 +203,7 @@ const es: SiteContent = {
   contact: {
     eyebrow: 'Contacto',
     title: 'Hablemos de tu seguridad',
-    subtitle: 'Contanos sobre tu infraestructura y te respondemos con un diagnóstico inicial sin costo.',
+    subtitle: 'Cuéntanos sobre tu infraestructura y te respondemos con un diagnóstico inicial sin costo.',
     form: {
       name: 'Nombre',
       email: 'Email',
@@ -218,13 +218,13 @@ const es: SiteContent = {
         'Gobierno de datos',
         'Otro',
       ],
-      message: 'Contanos brevemente tu necesidad',
+      message: 'Cuéntanos brevemente tu necesidad',
       submit: 'Enviar mensaje',
       submitting: 'Enviando...',
       success: 'Gracias, recibimos tu mensaje. Te contactamos a la brevedad.',
-      error: 'No pudimos enviar el mensaje. Probá de nuevo o escribinos directamente.',
+      error: 'No pudimos enviar el mensaje. Prueba de nuevo o escríbenos directamente.',
     },
-    directLabel: 'O escribinos directo a',
+    directLabel: 'O escríbenos directo a',
     email: 'contacto@exxacorp.com',
   },
   footer: {

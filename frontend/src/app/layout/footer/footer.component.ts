@@ -40,8 +40,30 @@ import { LogoComponent } from '../../shared/logo/logo.component';
           }
         </div>
 
-        <div class="mt-14 flex flex-col gap-2 border-t border-white/10 pt-6 text-xs text-violet-100/40 sm:flex-row sm:items-center sm:justify-between">
+        <div class="mt-14 flex flex-col gap-3 border-t border-white/10 pt-6 text-xs text-violet-100/40 sm:flex-row sm:items-center sm:justify-between">
           <span>&copy; {{ year }} Exxacorp. {{ i18n.content().footer.rights }}</span>
+
+          <span class="inline-flex flex-wrap items-center gap-1.5">
+            {{ i18n.content().footer.credit }}
+            <a
+              href="https://www.flowbit.cl/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-1.5 font-semibold text-amber-400 transition hover:text-amber-300"
+            >
+              <span class="flex h-4 w-4 items-center justify-center rounded bg-emerald-500 text-white">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 3 14h7l-1 8 11-14h-7l1-6z" /></svg>
+              </span>
+              Flowbit
+            </a>
+            <span>&middot;</span>
+            <a
+              href="https://www.instagram.com/flowbit.cl/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="font-semibold text-amber-400 transition hover:text-amber-300"
+            >@flowbit.cl</a>
+          </span>
         </div>
       </div>
     </footer>

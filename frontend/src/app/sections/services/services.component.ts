@@ -40,6 +40,26 @@ import { I18nService } from '../../core/i18n.service';
                       <path d="M8.5 17h7" />
                     </svg>
                   }
+                  @case ('development') {
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M8 9l-3 3 3 3" />
+                      <path d="M16 9l3 3-3 3" />
+                      <path d="M13 7l-2 10" />
+                    </svg>
+                  }
+                  @case ('ot-migration') {
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M4 21V10l5 3V10l5 3V10l5 3v8H4z" />
+                      <path d="M4 21h16" />
+                    </svg>
+                  }
+                  @case ('data-governance') {
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                      <ellipse cx="12" cy="6" rx="7" ry="3" />
+                      <path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6" />
+                      <path d="M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6" />
+                    </svg>
+                  }
                 }
               </div>
 

@@ -19,8 +19,11 @@ import { I18nService } from '../../core/i18n.service';
 
           <div class="grid grid-cols-2 gap-4 sm:grid-cols-3">
             @for (member of i18n.content().about.team; track member.role) {
-              <div class="flex flex-col items-center rounded-2xl border border-ink-900/[0.06] bg-white px-4 py-6 text-center shadow-sm">
-                <div class="flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-violet-800 to-violet-400 font-display text-sm font-bold text-white">
+              <div
+                data-motion-safe
+                class="group flex flex-col items-center rounded-2xl border border-ink-900/[0.06] bg-white px-4 py-6 text-center shadow-sm transition-[transform,box-shadow] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-1 hover:shadow-lg"
+              >
+                <div class="flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-violet-800 to-violet-400 font-display text-sm font-bold text-white transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105">
                   {{ member.initials }}
                 </div>
                 <p class="mt-3 text-xs leading-snug font-semibold text-ink-800">{{ member.role }}</p>

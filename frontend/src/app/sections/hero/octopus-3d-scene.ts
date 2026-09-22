@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { prefersReducedMotion } from '../../core/reduced-motion';
 
 const CUTE_URL = '/assets/3d/octopus-cute.glb';
 const SERIOUS_URL = '/assets/3d/octopus-serious.glb';
@@ -44,8 +45,10 @@ export class Octopus3DScene {
 
   private rafId = 0;
   private disposed = false;
+  private paused = false;
   private width = 1;
   private height = 1;
+  private readonly reducedMotion = prefersReducedMotion();
 
   private onHotspotUpdate: ((positions: { x: number; y: number }[]) => void) | null = null;
 
@@ -150,8 +153,22 @@ export class Octopus3DScene {
     this.camera.updateProjectionMatrix();
   }
 
+  /** Stops the render loop (e.g. while the canvas is scrolled out of view). */
+  pause(): void {
+    this.paused = true;
+    cancelAnimationFrame(this.rafId);
+  }
+
+  /** Restarts the render loop after `pause()`. */
+  resume(): void {
+    if (!this.paused || this.disposed) return;
+    this.paused = false;
+    this.clock.start();
+    this.renderLoop();
+  }
+
   private renderLoop = (): void => {
-    if (this.disposed) return;
+    if (this.disposed || this.paused) return;
     this.update(this.clock.getElapsedTime());
     this.renderer.render(this.scene, this.camera);
     this.rafId = requestAnimationFrame(this.renderLoop);
@@ -161,7 +178,7 @@ export class Octopus3DScene {
     this.currentTiltX += (this.targetTiltX - this.currentTiltX) * 0.08;
     this.currentTiltY += (this.targetTiltY - this.currentTiltY) * 0.08;
 
-    const idleSway = Math.sin(time * 0.6) * 0.03;
+    const idleSway = this.reducedMotion ? 0 : Math.sin(time * 0.6) * 0.03;
     this.pivot.rotation.x = this.currentTiltX;
     this.pivot.rotation.y = this.currentTiltY + idleSway;
 

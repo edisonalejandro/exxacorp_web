@@ -91,6 +91,7 @@ export class AttackChainComponent implements AfterViewInit, OnDestroy {
   private scene?: AttackChainScene;
   private scrollTrigger?: ScrollTrigger;
   private resizeObserver?: ResizeObserver;
+  private visibilityObserver?: IntersectionObserver;
 
   async ngAfterViewInit(): Promise<void> {
     const canvas = this.canvasRef().nativeElement;
@@ -114,6 +115,11 @@ export class AttackChainComponent implements AfterViewInit, OnDestroy {
     this.resizeObserver = new ResizeObserver(resize);
     this.resizeObserver.observe(parent);
 
+    this.visibilityObserver = new IntersectionObserver(
+      ([entry]) => (entry.isIntersecting ? this.scene?.resume() : this.scene?.pause()),
+    );
+    this.visibilityObserver.observe(this.wrapperRef().nativeElement);
+
     this.scrollTrigger = ScrollTrigger.create({
       trigger: this.wrapperRef().nativeElement,
       start: 'top top',
@@ -129,6 +135,7 @@ export class AttackChainComponent implements AfterViewInit, OnDestroy {
   ngOnDestroy(): void {
     this.scrollTrigger?.kill();
     this.resizeObserver?.disconnect();
+    this.visibilityObserver?.disconnect();
     this.scene?.dispose();
   }
 }

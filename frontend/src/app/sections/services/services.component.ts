@@ -16,7 +16,10 @@ import { I18nService } from '../../core/i18n.service';
 
         <div class="mt-14 grid gap-6 md:grid-cols-3">
           @for (item of i18n.content().services.items; track item.title) {
-            <article class="flex flex-col rounded-2xl border border-ink-900/[0.06] bg-white p-7 shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
+            <article
+              data-motion-safe
+              class="flex flex-col rounded-2xl border border-ink-900/[0.06] bg-white p-7 shadow-sm transition-[transform,box-shadow] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-1.5 hover:shadow-xl"
+            >
               <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-violet-100 text-violet-700">
                 @switch (item.icon) {
                   @case ('hardening') {

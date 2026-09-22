@@ -21,7 +21,7 @@ const INTRO_SEEN_KEY = 'exxacorp-intro-seen';
               {{ i18n.content().hero.eyebrow }}
             </span>
 
-            <h1 class="mt-6 text-4xl leading-[1.1] font-bold text-white sm:text-5xl lg:text-[3.4rem]">
+            <h1 class="mt-6 text-4xl leading-[1.1] font-bold tracking-tight text-white sm:text-5xl lg:text-[3.4rem]">
               {{ i18n.content().hero.title }}
             </h1>
 
@@ -32,11 +32,13 @@ const INTRO_SEEN_KEY = 'exxacorp-intro-seen';
             <div class="mt-9 flex flex-wrap items-center gap-4">
               <a
                 href="#contacto"
-                class="rounded-full bg-violet-500 px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-violet-900/50 transition hover:bg-violet-400"
+                data-motion-safe
+                class="rounded-full bg-violet-500 px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-violet-900/50 transition-[background-color,box-shadow,transform] duration-200 ease-out hover:bg-violet-400 hover:shadow-xl hover:shadow-violet-900/60 active:scale-[0.97]"
               >{{ i18n.content().hero.ctaPrimary }}</a>
               <a
                 href="#servicios"
-                class="rounded-full border border-white/20 px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-white/5"
+                data-motion-safe
+                class="rounded-full border border-white/20 px-6 py-3.5 text-sm font-semibold text-white transition-[background-color,transform] duration-200 ease-out hover:bg-white/5 active:scale-[0.97]"
               >{{ i18n.content().hero.ctaSecondary }}</a>
             </div>
           </div>
@@ -45,7 +47,8 @@ const INTRO_SEEN_KEY = 'exxacorp-intro-seen';
             @if (showIntro()) {
               <video
                 #introVideo
-                class="mx-auto aspect-video w-full max-w-md rounded-2xl border border-white/10 shadow-2xl shadow-violet-950/50"
+                class="mx-auto aspect-video w-full max-w-md rounded-2xl border border-white/10 shadow-2xl shadow-violet-950/50 transition-opacity duration-300 ease-out"
+                [class.opacity-0]="videoFading()"
                 [muted]="true"
                 [autoplay]="true"
                 playsinline
@@ -55,7 +58,9 @@ const INTRO_SEEN_KEY = 'exxacorp-intro-seen';
                 <source src="/assets/video/intro.mp4" type="video/mp4" />
               </video>
             } @else {
-              <app-octopus-showcase />
+              <div class="transition-opacity duration-300 ease-out" [class.opacity-0]="!showcaseEntering()">
+                <app-octopus-showcase />
+              </div>
             }
             <p class="mt-5 text-center text-sm text-violet-100/50">{{ i18n.content().hero.visualHint }}</p>
           </div>
@@ -76,7 +81,10 @@ const INTRO_SEEN_KEY = 'exxacorp-intro-seen';
 export class HeroComponent {
   protected readonly i18n = inject(I18nService);
   protected readonly showIntro = signal(!localStorage.getItem(INTRO_SEEN_KEY));
+  protected readonly videoFading = signal(false);
+  protected readonly showcaseEntering = signal(!this.showIntro());
   private readonly introVideo = viewChild<ElementRef<HTMLVideoElement>>('introVideo');
+  private dismissed = false;
 
   constructor() {
     effect(() => {
@@ -89,7 +97,14 @@ export class HeroComponent {
   }
 
   dismissIntro(): void {
+    if (this.dismissed) return;
+    this.dismissed = true;
+
     localStorage.setItem(INTRO_SEEN_KEY, '1');
-    this.showIntro.set(false);
+    this.videoFading.set(true);
+    setTimeout(() => {
+      this.showIntro.set(false);
+      requestAnimationFrame(() => this.showcaseEntering.set(true));
+    }, 300);
   }
 }

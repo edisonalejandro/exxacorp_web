@@ -89,6 +89,7 @@ export class OctopusShowcaseComponent implements AfterViewInit, OnDestroy {
 
   private scene?: Octopus3DScene;
   private resizeObserver?: ResizeObserver;
+  private visibilityObserver?: IntersectionObserver;
 
   async ngAfterViewInit(): Promise<void> {
     const canvas = this.canvasRef().nativeElement;
@@ -105,10 +106,16 @@ export class OctopusShowcaseComponent implements AfterViewInit, OnDestroy {
     resize();
     this.resizeObserver = new ResizeObserver(resize);
     this.resizeObserver.observe(container);
+
+    this.visibilityObserver = new IntersectionObserver(
+      ([entry]) => (entry.isIntersecting ? this.scene?.resume() : this.scene?.pause()),
+    );
+    this.visibilityObserver.observe(container);
   }
 
   ngOnDestroy(): void {
     this.resizeObserver?.disconnect();
+    this.visibilityObserver?.disconnect();
     this.scene?.dispose();
   }
 

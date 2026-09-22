@@ -71,7 +71,8 @@ type SubmitState = 'idle' | 'submitting' | 'success' | 'error';
             <button
               type="submit"
               [disabled]="form.invalid || state() === 'submitting'"
-              class="rounded-full bg-violet-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-violet-900/50 transition hover:bg-violet-400 disabled:cursor-not-allowed disabled:opacity-50"
+              data-motion-safe
+              class="rounded-full bg-violet-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-violet-900/50 transition-[background-color,box-shadow,transform] duration-200 ease-out hover:bg-violet-400 hover:shadow-xl hover:shadow-violet-900/60 active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-50 disabled:active:scale-100"
             >
               {{ state() === 'submitting' ? i18n.content().contact.form.submitting : i18n.content().contact.form.submit }}
             </button>

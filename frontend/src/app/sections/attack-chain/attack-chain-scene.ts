@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { prefersReducedMotion } from '../../core/reduced-motion';
 
 // --- small deterministic helpers -------------------------------------------------
 
@@ -83,8 +84,10 @@ export class AttackChainScene {
   private progress = 0;
   private rafId = 0;
   private disposed = false;
+  private paused = false;
   private width = 0;
   private height = 0;
+  private readonly reducedMotion = prefersReducedMotion();
 
   constructor(canvas: HTMLCanvasElement, labelContainer: HTMLElement, categories: string[]) {
     this.labelContainer = labelContainer;
@@ -299,8 +302,21 @@ export class AttackChainScene {
     this.camera.updateProjectionMatrix();
   }
 
+  /** Stops the render loop (e.g. while the canvas is scrolled out of view). */
+  pause(): void {
+    this.paused = true;
+    cancelAnimationFrame(this.rafId);
+  }
+
+  /** Restarts the render loop after `pause()`. */
+  resume(): void {
+    if (!this.paused || this.disposed) return;
+    this.paused = false;
+    this.renderLoop();
+  }
+
   private renderLoop = (): void => {
-    if (this.disposed) return;
+    if (this.disposed || this.paused) return;
     this.update(this.clock.getElapsedTime());
     this.renderer.render(this.scene, this.camera);
     this.rafId = requestAnimationFrame(this.renderLoop);
@@ -308,6 +324,10 @@ export class AttackChainScene {
 
   private update(time: number): void {
     const t = this.progress;
+    // Continuous decorative oscillation (glow pulses, objective spin) is
+    // muted under reduced-motion — the scroll-scrubbed reveal itself stays,
+    // since it's directly driven by the user's own scroll.
+    const pulseTime = this.reducedMotion ? 0 : time;
 
     // --- camera ---
     const gridToOrbit = reveal(t, 0.05, 0.3);
@@ -333,19 +353,19 @@ export class AttackChainScene {
       n.mesh.position.lerpVectors(n.gridPos, n.layerPos, disperse);
       const scale = lerp(1, 0.55, disperse);
       n.mesh.scale.setScalar(scale);
-      this.applyNodeColor(n, t, time);
+      this.applyNodeColor(n, t, pulseTime);
     }
 
     // --- lower layers fade in ---
     const layersIn = reveal(t, 0.34, 0.5);
     for (const n of this.l1Nodes) {
       (n.mesh.material as THREE.MeshStandardMaterial).opacity = layersIn;
-      this.applyNodeColor(n, t, time);
+      this.applyNodeColor(n, t, pulseTime);
     }
     for (const n of this.l2Nodes) {
       const l2In = reveal(t, 0.55, 0.7);
       (n.mesh.material as THREE.MeshStandardMaterial).opacity = l2In;
-      this.applyNodeColor(n, t, time);
+      this.applyNodeColor(n, t, pulseTime);
     }
 
     // --- edges ---
@@ -380,11 +400,11 @@ export class AttackChainScene {
     const objIn = reveal(t, 0.88, 0.98);
     const objMat = this.objectiveNode.mesh.material as THREE.MeshStandardMaterial;
     objMat.opacity = objIn;
-    objMat.emissiveIntensity = objIn * (1.2 + Math.sin(time * 3) * 0.2);
+    objMat.emissiveIntensity = objIn * (1.2 + Math.sin(pulseTime * 3) * 0.2);
     this.objectiveNode.mesh.position.copy(this.objectiveNode.layerPos);
-    this.objectiveNode.mesh.rotation.y = time * 0.6;
-    this.objectiveNode.mesh.rotation.x = time * 0.3;
-    (this.objectiveGlow.material as THREE.SpriteMaterial).opacity = objIn * (0.6 + Math.sin(time * 3) * 0.15);
+    this.objectiveNode.mesh.rotation.y = pulseTime * 0.6;
+    this.objectiveNode.mesh.rotation.x = pulseTime * 0.3;
+    (this.objectiveGlow.material as THREE.SpriteMaterial).opacity = objIn * (0.6 + Math.sin(pulseTime * 3) * 0.15);
 
     // --- labels (only meaningful during phase 1) ---
     const labelOpacity = 1 - reveal(t, 0.24, 0.4);

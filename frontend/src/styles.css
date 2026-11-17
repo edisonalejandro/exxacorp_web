@@ -33,6 +33,10 @@ html {
 body {
   margin: 0;
   font-family: var(--font-sans);
+  /* Scale fallback fonts to the web font's x-height so text doesn't jump
+     when Inter/Sora finish loading (font-display: swap). Inherited, and
+     from-font resolves per element, so headings match Sora's metrics. */
+  font-size-adjust: from-font;
   background-color: var(--color-mist-50);
   color: var(--color-ink-900);
 }

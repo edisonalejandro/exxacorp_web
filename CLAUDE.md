@@ -43,6 +43,7 @@ Sin backend propio todavía: el submit hace `POST` a Formspree (`core/config.ts`
 - El equipo en "Nosotros" (`translations.ts` → `about.team`) usa placeholders genéricos (iniciales "EX" + rol, sin nombres ni fotos reales).
 - El logo es una recreación propia en SVG; falta reemplazar por el asset final si Eduardo provee un archivo (SVG/PNG) distinto.
 - Email de contacto (`contact.email` en `translations.ts`) es `contacto@exxacorp.io`, placeholder.
+- Redes sociales del footer: `SOCIAL_LINKS` en `core/config.ts` está vacío; cada ícono (LinkedIn/GitHub/X) aparece solo cuando su URL se completa.
 
 ### Comandos
 ```bash

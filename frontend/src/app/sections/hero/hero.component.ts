@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, ElementRef, effect, inject, signal, viewChild } from '@angular/core';
 import { I18nService } from '../../core/i18n.service';
+import { readStorage, writeStorage } from '../../core/storage';
 import { OctopusShowcaseComponent } from './octopus-showcase.component';
 
 const INTRO_SEEN_KEY = 'exxacorp-intro-seen';
@@ -80,7 +81,7 @@ const INTRO_SEEN_KEY = 'exxacorp-intro-seen';
 })
 export class HeroComponent {
   protected readonly i18n = inject(I18nService);
-  protected readonly showIntro = signal(!localStorage.getItem(INTRO_SEEN_KEY));
+  protected readonly showIntro = signal(!readStorage(INTRO_SEEN_KEY));
   protected readonly videoFading = signal(false);
   protected readonly showcaseEntering = signal(!this.showIntro());
   private readonly introVideo = viewChild<ElementRef<HTMLVideoElement>>('introVideo');
@@ -100,7 +101,7 @@ export class HeroComponent {
     if (this.dismissed) return;
     this.dismissed = true;
 
-    localStorage.setItem(INTRO_SEEN_KEY, '1');
+    writeStorage(INTRO_SEEN_KEY, '1');
     this.videoFading.set(true);
     setTimeout(() => {
       this.showIntro.set(false);

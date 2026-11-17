@@ -31,6 +31,9 @@ const HOTSPOTS: Hotspot[] = [
   selector: 'app-octopus-showcase',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    '(document:keydown.escape)': 'dismissTips()',
+  },
   template: `
     <div
       class="relative mx-auto aspect-[413/465] w-full max-w-md select-none"
@@ -41,36 +44,44 @@ const HOTSPOTS: Hotspot[] = [
       <canvas #canvas class="absolute inset-0 h-full w-full"></canvas>
 
       @for (spot of hotspots; track spot.serviceIndex; let i = $index) {
-        <button
-          type="button"
-          class="absolute flex h-6 w-6 -translate-x-1/2 -translate-y-1/2 items-center justify-center"
+        <div
+          class="absolute -translate-x-1/2 -translate-y-1/2"
           [style.left.px]="hotspotPositions()[i].x"
           [style.top.px]="hotspotPositions()[i].y"
           (pointerenter)="showTip(spot.serviceIndex)"
           (pointerleave)="hideTip(spot.serviceIndex)"
-          (focus)="showTip(spot.serviceIndex)"
-          (blur)="hideTip(spot.serviceIndex)"
-          (click)="toggleTip(spot.serviceIndex)"
-          [attr.aria-label]="i18n.content().services.items[spot.serviceIndex].title"
         >
-          <span class="absolute h-2.5 w-2.5 animate-ping rounded-full bg-violet-300/70"></span>
-          <span class="absolute h-2.5 w-2.5 rounded-full bg-violet-300 shadow-[0_0_0_4px_rgba(167,139,250,0.25)]"></span>
+          <button
+            type="button"
+            class="relative flex h-6 w-6 items-center justify-center"
+            (focus)="showTip(spot.serviceIndex)"
+            (blur)="hideTip(spot.serviceIndex)"
+            (click)="toggleTip(spot.serviceIndex)"
+            [attr.aria-describedby]="'hotspot-desc-' + spot.serviceIndex"
+          >
+            <span class="sr-only">{{ i18n.content().services.items[spot.serviceIndex].title }}</span>
+            <span class="absolute h-2.5 w-2.5 animate-ping rounded-full bg-violet-300/70" aria-hidden="true"></span>
+            <span class="absolute h-2.5 w-2.5 rounded-full bg-violet-300 shadow-[0_0_0_4px_rgba(167,139,250,0.25)]" aria-hidden="true"></span>
+          </button>
 
-          @if (active() === spot.serviceIndex) {
-            <div
-              class="absolute z-10 w-48 rounded-xl border border-white/10 bg-ink-900/95 p-3 text-left text-sm shadow-xl backdrop-blur"
-              [class.left-0]="spot.tooltipAlign === 'left'"
-              [class.right-0]="spot.tooltipAlign === 'right'"
-              [class.left-1/2]="spot.tooltipAlign === 'center'"
-              [class.-translate-x-1/2]="spot.tooltipAlign === 'center'"
-              [class.top-7]="spot.tooltipSide === 'bottom'"
-              [class.bottom-7]="spot.tooltipSide === 'top'"
-            >
-              <p class="font-display font-semibold text-white">{{ i18n.content().services.items[spot.serviceIndex].title }}</p>
-              <p class="mt-1 text-xs leading-relaxed text-violet-100/70">{{ i18n.content().services.items[spot.serviceIndex].description }}</p>
-            </div>
-          }
-        </button>
+          <!-- Always in the DOM so aria-describedby (pointing at the description) resolves; hidden visually until active.
+               Being a sibling inside the hover wrapper keeps it open while the pointer moves onto it (WCAG 1.4.13). -->
+          <div
+            role="tooltip"
+            [id]="'hotspot-tip-' + spot.serviceIndex"
+            class="absolute z-10 w-48 rounded-xl border border-white/10 bg-ink-900/95 p-3 text-left text-sm shadow-xl backdrop-blur"
+            [class.hidden]="active() !== spot.serviceIndex"
+            [class.left-0]="spot.tooltipAlign === 'left'"
+            [class.right-0]="spot.tooltipAlign === 'right'"
+            [class.left-1/2]="spot.tooltipAlign === 'center'"
+            [class.-translate-x-1/2]="spot.tooltipAlign === 'center'"
+            [class.top-7]="spot.tooltipSide === 'bottom'"
+            [class.bottom-7]="spot.tooltipSide === 'top'"
+          >
+            <p class="font-display font-semibold text-white">{{ i18n.content().services.items[spot.serviceIndex].title }}</p>
+            <p [id]="'hotspot-desc-' + spot.serviceIndex" class="mt-1 text-xs leading-relaxed text-violet-100/70">{{ i18n.content().services.items[spot.serviceIndex].description }}</p>
+          </div>
+        </div>
       }
     </div>
   `,
@@ -145,6 +156,12 @@ export class OctopusShowcaseComponent implements AfterViewInit, OnDestroy {
     if (this.hovered() === i) {
       this.hovered.set(null);
     }
+  }
+
+  /** Escape dismisses any open tooltip without moving focus (WCAG 1.4.13 "dismissible"). */
+  protected dismissTips(): void {
+    this.hovered.set(null);
+    this.pinned.set(null);
   }
 
   toggleTip(i: number): void {

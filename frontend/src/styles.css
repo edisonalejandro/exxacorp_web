@@ -64,3 +64,15 @@ h1, h2, h3, h4 {
     transform: none !important;
   }
 }
+
+/* Contact form validation feedback (shown only after the field was left or a submit was attempted). */
+.field-error {
+  border-color: var(--color-red-400);
+  background-color: color-mix(in oklab, var(--color-red-500) 10%, transparent);
+}
+
+.field-error-msg {
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: var(--color-red-300);
+}

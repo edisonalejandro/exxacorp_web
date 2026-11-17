@@ -19,6 +19,9 @@ export interface SiteContent {
     about: string;
     contact: string;
     cta: string;
+    menuOpen: string;
+    menuClose: string;
+    languageLabel: string;
   };
   hero: {
     eyebrow: string;
@@ -65,6 +68,11 @@ export interface SiteContent {
       submitting: string;
       success: string;
       error: string;
+      required: string;
+      errorPrefix: string;
+      nameError: string;
+      emailError: string;
+      messageError: string;
     };
     directLabel: string;
     email: string;
@@ -84,6 +92,9 @@ const es: SiteContent = {
     about: 'Nosotros',
     contact: 'Contacto',
     cta: 'Solicitar diagnóstico',
+    menuOpen: 'Abrir menú',
+    menuClose: 'Cerrar menú',
+    languageLabel: 'Idioma',
   },
   hero: {
     eyebrow: 'Ciberseguridad ofensiva & defensiva',
@@ -223,6 +234,11 @@ const es: SiteContent = {
       submitting: 'Enviando...',
       success: 'Gracias, recibimos tu mensaje. Te contactamos a la brevedad.',
       error: 'No pudimos enviar el mensaje. Prueba de nuevo o escríbenos directamente.',
+      required: 'obligatorio',
+      errorPrefix: 'Error',
+      nameError: 'Ingresa tu nombre.',
+      emailError: 'Ingresa un email válido, por ejemplo nombre@empresa.com.',
+      messageError: 'Cuéntanos brevemente qué necesitas.',
     },
     directLabel: 'O escríbenos directo a',
     email: 'contacto@exxacorp.com',
@@ -255,6 +271,9 @@ const en: SiteContent = {
     about: 'About',
     contact: 'Contact',
     cta: 'Request assessment',
+    menuOpen: 'Open menu',
+    menuClose: 'Close menu',
+    languageLabel: 'Language',
   },
   hero: {
     eyebrow: 'Offensive & defensive cybersecurity',
@@ -384,6 +403,11 @@ const en: SiteContent = {
       submitting: 'Sending...',
       success: "Thanks, we've got your message. We'll be in touch shortly.",
       error: "We couldn't send your message. Please try again or email us directly.",
+      required: 'required',
+      errorPrefix: 'Error',
+      nameError: 'Enter your name.',
+      emailError: 'Enter a valid email address, for example name@company.com.',
+      messageError: 'Briefly tell us what you need.',
     },
     directLabel: 'Or email us directly at',
     email: 'contacto@exxacorp.com',

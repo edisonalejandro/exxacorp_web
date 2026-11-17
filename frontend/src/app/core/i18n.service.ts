@@ -1,13 +1,12 @@
-import { Injectable, computed, signal } from '@angular/core';
+import { DOCUMENT, Injectable, computed, effect, inject, signal } from '@angular/core';
 import { Lang, translations } from './translations';
+import { readStorage, writeStorage } from './storage';
 
 const STORAGE_KEY = 'exxacorp-lang';
 
 function detectInitialLang(): Lang {
-  if (typeof localStorage !== 'undefined') {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored === 'en' || stored === 'es') return stored;
-  }
+  const stored = readStorage(STORAGE_KEY);
+  if (stored === 'en' || stored === 'es') return stored;
   if (typeof navigator !== 'undefined' && navigator.language?.toLowerCase().startsWith('en')) {
     return 'en';
   }
@@ -19,11 +18,18 @@ export class I18nService {
   readonly lang = signal<Lang>(detectInitialLang());
   readonly content = computed(() => translations[this.lang()]);
 
+  private readonly document = inject(DOCUMENT);
+
+  constructor() {
+    // Keep <html lang> in sync so screen readers and browser translation use the right language.
+    effect(() => {
+      this.document.documentElement.lang = this.lang();
+    });
+  }
+
   setLang(lang: Lang): void {
     this.lang.set(lang);
-    if (typeof localStorage !== 'undefined') {
-      localStorage.setItem(STORAGE_KEY, lang);
-    }
+    writeStorage(STORAGE_KEY, lang);
   }
 
   toggle(): void {

@@ -99,11 +99,14 @@ interface NavLink {
       <div
         id="mobile-menu"
         data-motion-safe
-        class="grid overflow-hidden border-t border-white/10 bg-ink-950 transition-[grid-template-rows] duration-300 ease-out md:hidden"
+        class="grid bg-ink-950 transition-[grid-template-rows] duration-300 ease-out md:hidden"
         [style.gridTemplateRows]="menuOpen() ? '1fr' : '0fr'"
         [inert]="!menuOpen()"
       >
-        <nav class="flex min-h-0 flex-col gap-4 px-6 py-4">
+        <!-- The grid item must have no padding/border: they can't shrink, so they'd stay
+             visible as a strip under the header when the row collapses to 0fr. -->
+        <div class="min-h-0 overflow-hidden">
+        <nav class="flex flex-col gap-4 border-t border-white/10 px-6 py-4">
           @for (link of navLinks(); track link.id) {
             <a
               [href]="link.href"
@@ -147,6 +150,7 @@ interface NavLink {
             >{{ i18n.content().nav.cta }}</a>
           </div>
         </nav>
+        </div>
       </div>
     </header>
 

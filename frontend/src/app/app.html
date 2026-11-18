@@ -1,9 +1,13 @@
 <app-header />
 <main>
-  <app-hero />
-  <app-attack-chain />
-  <app-services />
-  <app-about />
-  <app-contact />
+  @if (isPrivacy) {
+    <app-privacy />
+  } @else {
+    <app-hero />
+    <app-attack-chain />
+    <app-services />
+    <app-about />
+    <app-contact />
+  }
 </main>
 <app-footer />

@@ -8,7 +8,7 @@ Landing page en **Angular 22** (standalone components, signals, `OnPush`) + **Ta
 
 ### Identidad de marca
 - Logo: hexágono outline + pulpo bicolor (violeta oscuro / lavanda), recreado en SVG en [`src/app/shared/logo/logo.component.ts`](frontend/src/app/shared/logo/logo.component.ts) — no hay asset real todavía, es un placeholder editable a la espera del archivo final de Eduardo.
-- Paleta y tipografías definidas como design tokens de Tailwind en [`src/styles.css`](frontend/src/styles.css) (`@theme`): tonos `ink-*` (casi negro, headers/hero/footer/contacto), `violet-*` (acento de marca), `mist-*` (fondos claros de contenido). Tipografía: Sora (headings) + Inter (texto), cargadas vía Google Fonts en `index.html`.
+- Paleta y tipografías definidas como design tokens de Tailwind en [`src/styles.css`](frontend/src/styles.css) (`@theme`): tonos `ink-*` (casi negro, headers/hero/footer/contacto), `violet-*` (acento de marca), `mist-*` (fondos claros de contenido). Tipografía: Sora (headings) + Inter (texto), empaquetadas con `@fontsource` e importadas en `src/styles.css` (sin Google Fonts: ver la política de privacidad).
 - Estilo: "corporativo confiable" — hero/contacto/footer en fondo oscuro (donde mejor luce el logo), secciones de contenido (servicios/nosotros) en fondo claro.
 
 ### Estructura

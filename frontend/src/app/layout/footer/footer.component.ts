@@ -51,7 +51,11 @@ import { SOCIAL_LINKS } from '../../core/config';
         </div>
 
         <div class="mt-14 flex flex-col gap-3 border-t border-white/10 pt-6 text-xs text-violet-100/40 sm:flex-row sm:items-center sm:justify-between">
-          <span>&copy; {{ year }} Exxacorp. {{ i18n.content().footer.rights }}</span>
+          <span class="inline-flex flex-wrap items-center gap-1.5">
+            <span>&copy; {{ year }} Exxacorp. {{ i18n.content().footer.rights }}</span>
+            <span aria-hidden="true">&middot;</span>
+            <a href="/privacidad" class="underline-offset-2 transition hover:text-violet-100 hover:underline">{{ i18n.content().footer.privacy }}</a>
+          </span>
 
           <span class="inline-flex flex-wrap items-center gap-1.5">
             {{ i18n.content().footer.credit }}

@@ -73,6 +73,8 @@ export interface SiteContent {
       nameError: string;
       emailError: string;
       messageError: string;
+      privacyNotice: string;
+      privacyLink: string;
     };
     directLabel: string;
     email: string;
@@ -81,6 +83,7 @@ export interface SiteContent {
     tagline: string;
     columns: { title: string; links: string[] }[];
     rights: string;
+    privacy: string;
     credit: string;
   };
 }
@@ -239,6 +242,8 @@ const es: SiteContent = {
       nameError: 'Ingresa tu nombre.',
       emailError: 'Ingresa un email válido, por ejemplo nombre@empresa.com.',
       messageError: 'Cuéntanos brevemente qué necesitas.',
+      privacyNotice: 'Usaremos tus datos solo para responder tu mensaje. Los recibe nuestro proveedor de formularios, Formspree. Más detalles en nuestra',
+      privacyLink: 'política de privacidad',
     },
     directLabel: 'O escríbenos directo a',
     email: 'contacto@exxacorp.com',
@@ -260,6 +265,7 @@ const es: SiteContent = {
       { title: 'Empresa', links: ['Nosotros', 'Contacto'] },
     ],
     rights: 'Todos los derechos reservados.',
+    privacy: 'Política de privacidad',
     credit: 'Diseñado y desarrollado por',
   },
 };
@@ -408,6 +414,8 @@ const en: SiteContent = {
       nameError: 'Enter your name.',
       emailError: 'Enter a valid email address, for example name@company.com.',
       messageError: 'Briefly tell us what you need.',
+      privacyNotice: 'We will only use your data to answer your message. It is received by our form provider, Formspree. More details in our',
+      privacyLink: 'privacy policy',
     },
     directLabel: 'Or email us directly at',
     email: 'contacto@exxacorp.com',
@@ -429,6 +437,7 @@ const en: SiteContent = {
       { title: 'Company', links: ['About', 'Contact'] },
     ],
     rights: 'All rights reserved.',
+    privacy: 'Privacy policy',
     credit: 'Designed and built by',
   },
 };

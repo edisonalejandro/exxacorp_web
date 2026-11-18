@@ -22,7 +22,7 @@ interface NavLink {
   template: `
     <header class="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-ink-950/90 backdrop-blur">
       <div class="mx-auto flex max-w-6xl items-center justify-between px-6 py-3.5 lg:px-8">
-        <a href="#inicio" class="shrink-0" (click)="closeMenu()">
+        <a href="/#inicio" class="shrink-0" (click)="closeMenu()">
           <app-logo tone="onDark" [size]="34" [wordmarkSize]="18" />
         </a>
 
@@ -70,7 +70,7 @@ interface NavLink {
             }
           </div>
           <a
-            href="#contacto"
+            href="/#contacto"
             data-motion-safe
             class="rounded-full bg-violet-500 px-4 py-2 text-sm font-semibold text-white shadow-sm shadow-violet-900/40 transition-[background-color,box-shadow,transform] duration-200 ease-out hover:bg-violet-400 hover:shadow-md hover:shadow-violet-900/50 active:scale-95"
           >{{ i18n.content().nav.cta }}</a>
@@ -143,7 +143,7 @@ interface NavLink {
               }
             </div>
             <a
-              href="#contacto"
+              href="/#contacto"
               (click)="closeMenu()"
               data-motion-safe
               class="rounded-full bg-violet-500 px-4 py-2 text-sm font-semibold text-white transition-transform duration-200 active:scale-95"
@@ -168,7 +168,10 @@ interface NavLink {
 export class HeaderComponent implements AfterViewInit, OnDestroy {
   protected readonly i18n = inject(I18nService);
   protected readonly menuOpen = signal(false);
-  protected readonly activeSection = signal<string>('inicio');
+  // En /privacidad ninguna sección de la portada está activa.
+  protected readonly activeSection = signal<string>(
+    typeof location !== 'undefined' && location.pathname.startsWith('/privacidad') ? '' : 'inicio',
+  );
   private readonly menuButton = viewChild.required<ElementRef<HTMLButtonElement>>('menuButton');
 
   protected readonly languages: { code: Lang; short: string; name: string }[] = [
@@ -179,10 +182,10 @@ export class HeaderComponent implements AfterViewInit, OnDestroy {
   protected readonly navLinks = computed<NavLink[]>(() => {
     const nav = this.i18n.content().nav;
     return [
-      { id: 'inicio', href: '#inicio', label: nav.home },
-      { id: 'servicios', href: '#servicios', label: nav.services },
-      { id: 'nosotros', href: '#nosotros', label: nav.about },
-      { id: 'contacto', href: '#contacto', label: nav.contact },
+      { id: 'inicio', href: '/#inicio', label: nav.home },
+      { id: 'servicios', href: '/#servicios', label: nav.services },
+      { id: 'nosotros', href: '/#nosotros', label: nav.about },
+      { id: 'contacto', href: '/#contacto', label: nav.contact },
     ];
   });
 

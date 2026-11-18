@@ -102,6 +102,11 @@ const VALIDATED_FIELDS: FieldName[] = ['name', 'email', 'message'];
             <input id="gotcha" name="_gotcha" type="text" formControlName="_gotcha" tabindex="-1" autocomplete="off" />
           </div>
 
+          <p class="text-xs leading-relaxed text-violet-100/50 sm:col-span-2">
+            {{ f.privacyNotice }}
+            <a href="/privacidad" class="font-semibold text-violet-300 underline-offset-2 hover:text-violet-200 hover:underline">{{ f.privacyLink }}</a>.
+          </p>
+
           <div class="flex flex-col gap-3 sm:col-span-2 sm:flex-row sm:items-center sm:justify-between">
             <p class="text-xs text-violet-100/50">
               {{ i18n.content().contact.directLabel }}

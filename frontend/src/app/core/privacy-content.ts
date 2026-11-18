@@ -40,7 +40,7 @@ export const privacyContent: Record<Lang, PrivacyContent> = {
   es: {
     eyebrow: 'Privacidad',
     title: 'Política de privacidad',
-    meta: `Versión ${PRIVACY_VERSION} · vigente desde el 1 de diciembre de 2026`,
+    meta: `Versión ${PRIVACY_VERSION} · vigente desde el 17 de noviembre de 2026`,
     intro:
       'Esta política explica qué datos personales trata Exxacorp cuando visitas exxacorp.com o nos escribes, para qué, quién los recibe, cuánto tiempo los guardamos y cómo ejercer tus derechos.',
     sections: [
@@ -128,7 +128,7 @@ export const privacyContent: Record<Lang, PrivacyContent> = {
   en: {
     eyebrow: 'Privacy',
     title: 'Privacy policy',
-    meta: `Version ${PRIVACY_VERSION} · effective December 1, 2026`,
+    meta: `Version ${PRIVACY_VERSION} · effective November 17, 2026`,
     intro:
       'This policy explains which personal data Exxacorp processes when you visit exxacorp.com or write to us, why, who receives it, how long we keep it and how to exercise your rights. It is governed by Chilean law; the Spanish version prevails.',
     sections: [

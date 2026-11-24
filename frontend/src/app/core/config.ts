@@ -20,8 +20,8 @@ export const SCHEDULING_URL = '';
 /**
  * Entrada en vigencia de la Ley 21.719 (datos personales). Desde esta fecha el
  * aviso de #normativa dice "vigente desde" en vez de "entra en vigencia".
- * Ojo: en noviembre de 2026 hay un proyecto en trámite que la posterga al
- * 15-10-2027. Si se publica, actualizar esta fecha y los textos
+ * Fecha fijada por la Ley 21.855 (D.O. 23-11-2026), que postergó la entrada
+ * en vigencia original del 1-12-2026. Si cambia, actualizar también los textos
  * `regulation.deadlineBefore/After` en translations.ts.
  */
-export const LEY_21719_IN_FORCE = new Date('2026-12-01T00:00:00-03:00');
+export const LEY_21719_IN_FORCE = new Date('2027-10-15T00:00:00-03:00');

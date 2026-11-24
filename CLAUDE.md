@@ -35,7 +35,7 @@ src/app/
   app.ts / app.html         # composición de header + secciones + footer (single page, nav por anchors)
 ```
 
-El aviso de la Ley 21.719 en `#normativa` cambia solo de "entra en vigencia" a "vigente desde" a partir de `LEY_21719_IN_FORCE` (`core/config.ts`, hoy 1-12-2026). En noviembre de 2026 había un proyecto en trámite para postergarla al 15-10-2027: si se publica, actualizar esa fecha y los textos.
+El aviso de la Ley 21.719 en `#normativa` cambia solo de "entra en vigencia" a "vigente desde" a partir de `LEY_21719_IN_FORCE` (`core/config.ts`): 15-10-2027, fijada por la Ley 21.855 (D.O. 23-11-2026), que postergó el 1-12-2026 original. Las obligaciones y multas de `#normativa` se revisaron contra los textos de BCN LeyChile en noviembre de 2026 (21.663 arts. 4, 8, 9 y 40; 21.719 arts. 14 quinquies, 14 sexies, 15 ter, 35 y 38).
 
 SEO: meta tags, Open Graph (`public/og-image.png`), JSON-LD, `robots.txt` y `sitemap.xml` apuntan a `https://exxacorp.com` (dominio principal; también tenemos `exxacorp.cl`, que debe redirigir con 301 al `.com` desde la configuración de dominios de Vercel para no duplicar contenido). El sitio se renderiza solo en el navegador (sin prerender todavía).
 

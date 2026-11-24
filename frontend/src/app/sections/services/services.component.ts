@@ -1,9 +1,11 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
 import { I18nService } from '../../core/i18n.service';
 
 @Component({
   selector: 'app-services',
   standalone: true,
+  imports: [NgTemplateOutlet],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section id="servicios" class="bg-mist-50 py-24 lg:py-32">
@@ -14,60 +16,64 @@ import { I18nService } from '../../core/i18n.service';
           <p class="mt-4 text-lg leading-relaxed text-ink-700/80">{{ i18n.content().services.subtitle }}</p>
         </div>
 
+        <ng-template #serviceIcon let-icon>
+        @switch (icon) {
+          @case ('hardening') {
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 3l7 3v5.5c0 5-3.2 8-7 9.5-3.8-1.5-7-4.5-7-9.5V6l7-3z" />
+              <path d="M9 12l2 2 4-4" />
+            </svg>
+          }
+          @case ('pentesting') {
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="7.5" />
+              <circle cx="12" cy="12" r="2.5" />
+              <path d="M12 2v3.5M12 18.5V22M2 12h3.5M18.5 12H22" />
+            </svg>
+          }
+          @case ('compliance') {
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="5" y="4" width="14" height="17" rx="2" />
+              <path d="M9 3.5h6v2H9z" fill="currentColor" stroke="none" />
+              <path d="M8.5 12.5l2 2 4.5-4.5" />
+              <path d="M8.5 17h7" />
+            </svg>
+          }
+          @case ('development') {
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M8 9l-3 3 3 3" />
+              <path d="M16 9l3 3-3 3" />
+              <path d="M13 7l-2 10" />
+            </svg>
+          }
+          @case ('ot-migration') {
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 21V10l5 3V10l5 3V10l5 3v8H4z" />
+              <path d="M4 21h16" />
+            </svg>
+          }
+          @case ('data-governance') {
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <ellipse cx="12" cy="6" rx="7" ry="3" />
+              <path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6" />
+              <path d="M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6" />
+            </svg>
+          }
+        }
+        </ng-template>
+
         <div class="mt-14 grid gap-6 md:grid-cols-3">
-          @for (item of i18n.content().services.items; track item.title) {
+          @for (item of coreItems(); track item.icon) {
             <article
               data-motion-safe
-              class="flex flex-col rounded-2xl border border-ink-900/[0.06] bg-white p-7 shadow-sm transition-[transform,box-shadow] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-1.5 hover:shadow-xl"
+              class="flex flex-col rounded-2xl border border-ink-900/[0.06] bg-white p-7 shadow-sm transition-[transform,box-shadow] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-1 hover:shadow-lg"
             >
               <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-violet-100 text-violet-700">
-                @switch (item.icon) {
-                  @case ('hardening') {
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                      <path d="M12 3l7 3v5.5c0 5-3.2 8-7 9.5-3.8-1.5-7-4.5-7-9.5V6l7-3z" />
-                      <path d="M9 12l2 2 4-4" />
-                    </svg>
-                  }
-                  @case ('pentesting') {
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                      <circle cx="12" cy="12" r="7.5" />
-                      <circle cx="12" cy="12" r="2.5" />
-                      <path d="M12 2v3.5M12 18.5V22M2 12h3.5M18.5 12H22" />
-                    </svg>
-                  }
-                  @case ('compliance') {
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                      <rect x="5" y="4" width="14" height="17" rx="2" />
-                      <path d="M9 3.5h6v2H9z" fill="currentColor" stroke="none" />
-                      <path d="M8.5 12.5l2 2 4.5-4.5" />
-                      <path d="M8.5 17h7" />
-                    </svg>
-                  }
-                  @case ('development') {
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                      <path d="M8 9l-3 3 3 3" />
-                      <path d="M16 9l3 3-3 3" />
-                      <path d="M13 7l-2 10" />
-                    </svg>
-                  }
-                  @case ('ot-migration') {
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                      <path d="M4 21V10l5 3V10l5 3V10l5 3v8H4z" />
-                      <path d="M4 21h16" />
-                    </svg>
-                  }
-                  @case ('data-governance') {
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                      <ellipse cx="12" cy="6" rx="7" ry="3" />
-                      <path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6" />
-                      <path d="M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6" />
-                    </svg>
-                  }
-                }
+                <ng-container *ngTemplateOutlet="serviceIcon; context: { $implicit: item.icon }" />
               </div>
 
               <h3 class="mt-5 text-lg font-bold text-ink-900">{{ item.title }}</h3>
-              <p class="mt-2.5 text-sm leading-relaxed text-ink-700/75">{{ item.description }}</p>
+              <p class="mt-2.5 text-sm leading-relaxed text-ink-700/80">{{ item.description }}</p>
 
               <ul class="mt-5 space-y-2 border-t border-ink-900/[0.06] pt-5">
                 @for (bullet of item.bullets; track bullet) {
@@ -80,10 +86,29 @@ import { I18nService } from '../../core/i18n.service';
             </article>
           }
         </div>
+
+        <div class="mt-12">
+          <h3 class="text-xs font-semibold tracking-wide text-ink-700/70 uppercase">{{ i18n.content().services.extraLabel }}</h3>
+          <div class="mt-4 grid gap-px overflow-hidden rounded-2xl border border-ink-900/[0.08] bg-ink-900/[0.08] md:grid-cols-3">
+            @for (item of extraItems(); track item.icon) {
+              <div class="flex gap-4 bg-white p-5">
+                <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-mist-100 text-ink-700 [&_svg]:h-5 [&_svg]:w-5">
+                  <ng-container *ngTemplateOutlet="serviceIcon; context: { $implicit: item.icon }" />
+                </div>
+                <div>
+                  <p class="font-display text-sm font-semibold text-ink-900">{{ item.title }}</p>
+                  <p class="mt-1 text-sm leading-relaxed text-ink-700/80">{{ item.description }}</p>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
       </div>
     </section>
   `,
 })
 export class ServicesComponent {
   protected readonly i18n = inject(I18nService);
+  protected readonly coreItems = computed(() => this.i18n.content().services.items.filter((i) => i.tier === 'core'));
+  protected readonly extraItems = computed(() => this.i18n.content().services.items.filter((i) => i.tier === 'extra'));
 }

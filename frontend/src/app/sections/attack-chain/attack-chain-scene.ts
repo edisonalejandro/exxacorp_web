@@ -147,7 +147,7 @@ export class AttackChainScene {
 
       const el = document.createElement('div');
       el.className =
-        'pointer-events-none absolute left-0 top-0 whitespace-nowrap font-mono text-[10px] uppercase tracking-widest text-white/70 transition-opacity duration-150';
+        'pointer-events-none absolute left-0 top-0 whitespace-nowrap font-display text-[10px] uppercase tracking-widest text-white/70 transition-opacity duration-150';
       el.textContent = categories[i] ?? '';
       this.labelContainer.appendChild(el);
       this.labels.push({ el, anchor: gridPos.clone() });

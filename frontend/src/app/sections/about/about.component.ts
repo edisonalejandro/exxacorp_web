@@ -1,6 +1,10 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { I18nService } from '../../core/i18n.service';
 
+/**
+ * Perfiles del equipo pendientes. Cuando estén listos, agregar aquí una
+ * grilla con nombre, foto, cargo y LinkedIn (no volver a poner placeholders).
+ */
 @Component({
   selector: 'app-about',
   standalone: true,
@@ -8,28 +12,28 @@ import { I18nService } from '../../core/i18n.service';
   template: `
     <section id="nosotros" class="bg-mist-100 py-24 lg:py-32">
       <div class="mx-auto max-w-6xl px-6 lg:px-8">
-        <div class="grid gap-14 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
+        <div class="grid gap-12 lg:grid-cols-[1fr_1fr] lg:gap-16">
           <div>
             <span class="text-xs font-semibold tracking-wide text-violet-600 uppercase">{{ i18n.content().about.eyebrow }}</span>
-            <h2 class="mt-3 text-3xl font-bold text-ink-900 sm:text-4xl">{{ i18n.content().about.title }}</h2>
+            <h2 class="mt-3 text-3xl font-bold text-balance text-ink-900 sm:text-4xl">{{ i18n.content().about.title }}</h2>
             @for (p of i18n.content().about.paragraphs; track p) {
               <p class="mt-5 text-base leading-relaxed text-ink-700/80">{{ p }}</p>
             }
           </div>
 
-          <div class="grid grid-cols-2 gap-4 sm:grid-cols-3">
-            @for (member of i18n.content().about.team; track member.role) {
-              <div
-                data-motion-safe
-                class="group flex flex-col items-center rounded-2xl border border-ink-900/[0.06] bg-white px-4 py-6 text-center shadow-sm transition-[transform,box-shadow] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-1 hover:shadow-lg"
-              >
-                <div class="flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-violet-800 to-violet-400 font-display text-sm font-bold text-white transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105">
-                  {{ member.initials }}
+          <ul class="divide-y divide-ink-900/[0.08] self-start rounded-2xl border border-ink-900/[0.08] bg-white">
+            @for (item of i18n.content().about.principles; track item.title) {
+              <li class="flex gap-4 p-6">
+                <svg class="mt-0.5 shrink-0 text-violet-600" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M12 2.5l8 4.6v9.8l-8 4.6-8-4.6V7.1z" />
+                </svg>
+                <div>
+                  <h3 class="font-display text-base font-semibold text-ink-900">{{ item.title }}</h3>
+                  <p class="mt-1.5 text-sm leading-relaxed text-ink-700/80">{{ item.description }}</p>
                 </div>
-                <p class="mt-3 text-xs leading-snug font-semibold text-ink-800">{{ member.role }}</p>
-              </div>
+              </li>
             }
-          </div>
+          </ul>
         </div>
       </div>
     </section>

@@ -14,7 +14,7 @@ import { SOCIAL_LINKS } from '../../core/config';
         <div class="grid gap-12 sm:grid-cols-[1.3fr_1fr_1fr]">
           <div>
             <app-logo tone="onDark" [size]="32" [wordmarkSize]="17" />
-            <p class="mt-4 max-w-xs text-sm leading-relaxed text-violet-100/55">{{ i18n.content().footer.tagline }}</p>
+            <p class="mt-4 max-w-xs text-sm leading-relaxed text-violet-100/70">{{ i18n.content().footer.tagline }}</p>
 
             <div class="mt-5 flex items-center gap-3">
               <a [href]="'mailto:' + i18n.content().contact.email" [attr.aria-label]="'Email: ' + i18n.content().contact.email" data-motion-safe class="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 text-violet-100/60 transition-[border-color,color,transform] duration-200 ease-out hover:border-violet-400/40 hover:text-white active:scale-90">
@@ -42,15 +42,15 @@ import { SOCIAL_LINKS } from '../../core/config';
             <div>
               <h4 class="text-sm font-semibold text-white">{{ col.title }}</h4>
               <ul class="mt-4 space-y-2.5">
-                @for (link of col.links; track link) {
-                  <li><span class="text-sm text-violet-100/55">{{ link }}</span></li>
+                @for (link of col.links; track link.label) {
+                  <li><a [href]="link.href" class="text-sm text-violet-100/70 transition-colors hover:text-white">{{ link.label }}</a></li>
                 }
               </ul>
             </div>
           }
         </div>
 
-        <div class="mt-14 flex flex-col gap-3 border-t border-white/10 pt-6 text-xs text-violet-100/40 sm:flex-row sm:items-center sm:justify-between">
+        <div class="mt-14 flex flex-col gap-3 border-t border-white/10 pt-6 text-xs text-violet-100/65 sm:flex-row sm:items-center sm:justify-between">
           <span class="inline-flex flex-wrap items-center gap-1.5">
             <span>&copy; {{ year }} Exxacorp. {{ i18n.content().footer.rights }}</span>
             <span aria-hidden="true">&middot;</span>

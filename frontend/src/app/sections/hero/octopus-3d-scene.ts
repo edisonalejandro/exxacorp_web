@@ -1,29 +1,26 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
 import { prefersReducedMotion } from '../../core/reduced-motion';
 
-const CUTE_URL = '/assets/3d/octopus-cute.glb';
-const SERIOUS_URL = '/assets/3d/octopus-serious.glb';
+const MODEL_URL = '/assets/3d/octopus-serious.glb';
 
-// Hexagon corner-dot positions as measured on the source artwork (% of the
-// badge's own width/height), reused here to anchor the 6 hotspot markers to
-// the corresponding point on the 3D relief.
-const HOTSPOT_PCT: { x: number; y: number }[] = [
-  { x: 49.68, y: 9.44 }, // top
-  { x: 87.74, y: 30.58 }, // upper-right
-  { x: 87.87, y: 69.14 }, // lower-right
-  { x: 49.58, y: 89.39 }, // bottom
-  { x: 11.64, y: 69.13 }, // lower-left
-  { x: 11.5, y: 30.62 }, // upper-left
-];
+/**
+ * Hexagon corner-dot positions as measured on the source artwork (% of the
+ * badge's own width/height), used to anchor the hotspot markers to the
+ * corresponding point on the 3D relief. Only three alternate corners are used
+ * (one per core service) so the tooltips never cover each other.
+ */
+export const HOTSPOT_PCT = {
+  top: { x: 49.68, y: 9.44 },
+  lowerRight: { x: 87.87, y: 69.14 },
+  lowerLeft: { x: 11.64, y: 69.13 },
+} as const;
+export type HotspotCorner = keyof typeof HOTSPOT_PCT;
+const CORNERS: HotspotCorner[] = ['top', 'lowerRight', 'lowerLeft'];
 
 const MAX_TILT = 0.22; // radians (~12.6deg) — parallax only, never a full turn
 const TARGET_HEIGHT = 2.6;
-
-interface LoadedOctopus {
-  root: THREE.Group;
-  materials: THREE.Material[];
-}
 
 export class Octopus3DScene {
   private readonly scene = new THREE.Scene();
@@ -32,16 +29,12 @@ export class Octopus3DScene {
   private readonly clock = new THREE.Clock();
   private readonly pivot = new THREE.Group();
 
-  private cute?: LoadedOctopus;
-  private serious?: LoadedOctopus;
   private anchorLocal: THREE.Vector3[] = [];
 
   private targetTiltX = 0;
   private targetTiltY = 0;
   private currentTiltX = 0;
   private currentTiltY = 0;
-  private mood = 0; // 0 = cute, 1 = serious
-  private moodTarget = 0;
 
   private rafId = 0;
   private disposed = false;
@@ -50,7 +43,8 @@ export class Octopus3DScene {
   private height = 1;
   private readonly reducedMotion = prefersReducedMotion();
 
-  private onHotspotUpdate: ((positions: { x: number; y: number }[]) => void) | null = null;
+  private onHotspotUpdate: ((positions: Record<HotspotCorner, { x: number; y: number }>) => void) | null = null;
+  private onLoaded: (() => void) | null = null;
 
   constructor(private readonly canvas: HTMLCanvasElement) {
     this.renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
@@ -79,20 +73,26 @@ export class Octopus3DScene {
     this.renderLoop();
   }
 
-  onHotspots(cb: (positions: { x: number; y: number }[]) => void): void {
+  onHotspots(cb: (positions: Record<HotspotCorner, { x: number; y: number }>) => void): void {
     this.onHotspotUpdate = cb;
+  }
+
+  /** Called once the model is in the scene (the static poster can fade out). */
+  onReady(cb: () => void): void {
+    this.onLoaded = cb;
   }
 
   private async load(): Promise<void> {
     const loader = new GLTFLoader();
-    const [cuteGltf, seriousGltf] = await Promise.all([loader.loadAsync(CUTE_URL), loader.loadAsync(SERIOUS_URL)]);
-
-    this.cute = this.prepare(cuteGltf.scene, true);
-    this.serious = this.prepare(seriousGltf.scene, false);
-    this.pivot.add(this.cute.root, this.serious.root);
+    loader.setMeshoptDecoder(MeshoptDecoder);
+    const gltf = await loader.loadAsync(MODEL_URL);
+    if (this.disposed) return;
+    this.prepare(gltf.scene);
+    this.pivot.add(gltf.scene);
+    this.onLoaded?.();
   }
 
-  private prepare(root: THREE.Group, computeAnchors: boolean): LoadedOctopus {
+  private prepare(root: THREE.Group): void {
     const box = new THREE.Box3().setFromObject(root);
     const size = new THREE.Vector3();
     box.getSize(size);
@@ -103,35 +103,11 @@ export class Octopus3DScene {
     const scale = TARGET_HEIGHT / size.y;
     root.scale.setScalar(scale);
 
-    if (computeAnchors) {
-      const depth = size.z * scale;
-      this.anchorLocal = HOTSPOT_PCT.map(
-        (p) =>
-          new THREE.Vector3(
-            (p.x / 100 - 0.5) * size.x * scale,
-            (0.5 - p.y / 100) * size.y * scale,
-            depth * 0.32,
-          ),
-      );
-    }
-
-    const materials: THREE.Material[] = [];
-    root.traverse((obj) => {
-      if (obj instanceof THREE.Mesh) {
-        const mats = Array.isArray(obj.material) ? obj.material : [obj.material];
-        for (const m of mats) {
-          m.transparent = true;
-          m.opacity = computeAnchors ? 1 : 0;
-          materials.push(m);
-        }
-      }
+    const depth = size.z * scale;
+    this.anchorLocal = CORNERS.map((corner) => {
+      const p = HOTSPOT_PCT[corner];
+      return new THREE.Vector3((p.x / 100 - 0.5) * size.x * scale, (0.5 - p.y / 100) * size.y * scale, depth * 0.32);
     });
-
-    return { root, materials };
-  }
-
-  setMood(serious: boolean): void {
-    this.moodTarget = serious ? 1 : 0;
   }
 
   setPointer(nx: number, ny: number): void {
@@ -182,32 +158,12 @@ export class Octopus3DScene {
     this.pivot.rotation.x = this.currentTiltX;
     this.pivot.rotation.y = this.currentTiltY + idleSway;
 
-    this.mood += (this.moodTarget - this.mood) * 0.09;
-    if (this.cute && this.serious) {
-      // Only one mesh is ever visible/transparent at a time: rendering both
-      // fully-overlapping meshes as transparent simultaneously produces bad
-      // depth-sorting artifacts (large dark patches). So this is a quick
-      // sequential fade-out-then-fade-in across the midpoint instead of a
-      // true cross-dissolve.
-      if (this.mood < 0.5) {
-        const cuteOpacity = Math.min(1, (0.5 - this.mood) * 2);
-        this.cute.root.visible = true;
-        this.serious.root.visible = false;
-        for (const m of this.cute.materials) m.opacity = cuteOpacity;
-      } else {
-        const seriousOpacity = Math.min(1, (this.mood - 0.5) * 2);
-        this.cute.root.visible = false;
-        this.serious.root.visible = true;
-        for (const m of this.serious.materials) m.opacity = seriousOpacity;
-      }
-    }
-
-    if (this.onHotspotUpdate && this.anchorLocal.length === 6) {
+    if (this.onHotspotUpdate && this.anchorLocal.length === CORNERS.length) {
       this.pivot.updateMatrixWorld(true);
-      const positions = this.anchorLocal.map((local) => {
-        const world = local.clone().applyMatrix4(this.pivot.matrixWorld);
-        const projected = world.project(this.camera);
-        return {
+      const positions = {} as Record<HotspotCorner, { x: number; y: number }>;
+      CORNERS.forEach((corner, i) => {
+        const projected = this.anchorLocal[i].clone().applyMatrix4(this.pivot.matrixWorld).project(this.camera);
+        positions[corner] = {
           x: (projected.x * 0.5 + 0.5) * this.width,
           y: (-projected.y * 0.5 + 0.5) * this.height,
         };

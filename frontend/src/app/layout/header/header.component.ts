@@ -3,7 +3,7 @@ import { I18nService } from '../../core/i18n.service';
 import type { Lang } from '../../core/translations';
 import { LogoComponent } from '../../shared/logo/logo.component';
 
-const SECTION_IDS = ['inicio', 'servicios', 'nosotros', 'contacto'] as const;
+const SECTION_IDS = ['inicio', 'normativa', 'servicios', 'metodologia', 'entregables', 'nosotros', 'contacto'] as const;
 
 interface NavLink {
   id: (typeof SECTION_IDS)[number];
@@ -26,7 +26,7 @@ interface NavLink {
           <app-logo tone="onDark" [size]="34" [wordmarkSize]="18" />
         </a>
 
-        <nav class="hidden items-center gap-8 md:flex">
+        <nav class="hidden items-center gap-7 lg:flex">
           @for (link of navLinks(); track link.id) {
             <a
               [href]="link.href"
@@ -44,7 +44,7 @@ interface NavLink {
           }
         </nav>
 
-        <div class="hidden items-center gap-4 md:flex">
+        <div class="hidden items-center gap-4 lg:flex">
           <div
             role="group"
             [attr.aria-label]="i18n.content().nav.languageLabel"
@@ -80,7 +80,7 @@ interface NavLink {
           type="button"
           #menuButton
           data-motion-safe
-          class="flex items-center justify-center rounded-lg border border-white/15 p-2 text-white transition-transform duration-150 active:scale-90 md:hidden"
+          class="flex items-center justify-center rounded-lg border border-white/15 p-2 text-white transition-transform duration-150 active:scale-90 lg:hidden"
           (click)="menuOpen.set(!menuOpen())"
           [attr.aria-expanded]="menuOpen()"
           aria-controls="mobile-menu"
@@ -99,7 +99,7 @@ interface NavLink {
       <div
         id="mobile-menu"
         data-motion-safe
-        class="grid bg-ink-950 transition-[grid-template-rows] duration-300 ease-out md:hidden"
+        class="grid bg-ink-950 transition-[grid-template-rows] duration-300 ease-out lg:hidden"
         [style.gridTemplateRows]="menuOpen() ? '1fr' : '0fr'"
         [inert]="!menuOpen()"
       >
@@ -156,7 +156,7 @@ interface NavLink {
 
     <div
       data-motion-safe
-      class="fixed inset-0 z-40 bg-ink-950/60 backdrop-blur-sm transition-opacity duration-300 ease-out md:hidden"
+      class="fixed inset-0 z-40 bg-ink-950/60 backdrop-blur-sm transition-opacity duration-300 ease-out lg:hidden"
       [class.opacity-100]="menuOpen()"
       [class.opacity-0]="!menuOpen()"
       [class.pointer-events-none]="!menuOpen()"
@@ -183,7 +183,9 @@ export class HeaderComponent implements AfterViewInit, OnDestroy {
     const nav = this.i18n.content().nav;
     return [
       { id: 'inicio', href: '/#inicio', label: nav.home },
+      { id: 'normativa', href: '/#normativa', label: nav.regulation },
       { id: 'servicios', href: '/#servicios', label: nav.services },
+      { id: 'metodologia', href: '/#metodologia', label: nav.methodology },
       { id: 'nosotros', href: '/#nosotros', label: nav.about },
       { id: 'contacto', href: '/#contacto', label: nav.contact },
     ];

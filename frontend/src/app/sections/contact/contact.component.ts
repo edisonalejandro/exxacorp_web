@@ -1,8 +1,9 @@
-import { ChangeDetectionStrategy, Component, ElementRef, inject, signal, viewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, effect, inject, signal, viewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { I18nService } from '../../core/i18n.service';
-import { FORMSPREE_ENDPOINT } from '../../core/config';
+import { FORMSPREE_ENDPOINT, SCHEDULING_URL } from '../../core/config';
+import { ContactIntentService } from '../../core/contact-intent.service';
 
 type SubmitState = 'idle' | 'submitting' | 'success' | 'error';
 type FieldName = 'name' | 'email' | 'message';
@@ -21,7 +22,16 @@ const VALIDATED_FIELDS: FieldName[] = ['name', 'email', 'message'];
         <div class="text-center">
           <span class="text-xs font-semibold tracking-wide text-violet-300 uppercase">{{ i18n.content().contact.eyebrow }}</span>
           <h2 id="contact-title" class="mt-3 text-3xl font-bold text-white sm:text-4xl">{{ i18n.content().contact.title }}</h2>
-          <p class="mx-auto mt-4 max-w-xl text-base leading-relaxed text-violet-100/70">{{ i18n.content().contact.subtitle }}</p>
+          <p class="mx-auto mt-4 max-w-xl text-base leading-relaxed text-violet-100/75">{{ i18n.content().contact.subtitle }}</p>
+          @if (schedulingUrl) {
+            <a
+              [href]="schedulingUrl"
+              target="_blank"
+              rel="noopener noreferrer"
+              data-motion-safe
+              class="mt-6 inline-flex items-center gap-2 rounded-full border border-white/20 px-5 py-2.5 text-sm font-semibold text-white transition-[background-color,transform] duration-200 ease-out hover:bg-white/5 active:scale-[0.97]"
+            >{{ i18n.content().contact.scheduleLabel }}</a>
+          }
         </div>
 
         <form
@@ -102,13 +112,13 @@ const VALIDATED_FIELDS: FieldName[] = ['name', 'email', 'message'];
             <input id="gotcha" name="_gotcha" type="text" formControlName="_gotcha" tabindex="-1" autocomplete="off" />
           </div>
 
-          <p class="text-xs leading-relaxed text-violet-100/50 sm:col-span-2">
+          <p class="text-xs leading-relaxed text-violet-100/70 sm:col-span-2">
             {{ f.privacyNotice }}
             <a href="/privacidad" class="font-semibold text-violet-300 underline-offset-2 hover:text-violet-200 hover:underline">{{ f.privacyLink }}</a>.
           </p>
 
           <div class="flex flex-col gap-3 sm:col-span-2 sm:flex-row sm:items-center sm:justify-between">
-            <p class="text-xs text-violet-100/50">
+            <p class="text-xs text-violet-100/70">
               {{ i18n.content().contact.directLabel }}
               <a [href]="'mailto:' + i18n.content().contact.email" class="font-semibold text-violet-300 hover:text-violet-200">{{ i18n.content().contact.email }}</a>
             </p>
@@ -142,6 +152,9 @@ export class ContactComponent {
   private readonly http = inject(HttpClient);
   private readonly formEl = viewChild.required<ElementRef<HTMLFormElement>>('formEl');
 
+  private readonly intent = inject(ContactIntentService);
+  protected readonly schedulingUrl = SCHEDULING_URL;
+
   protected readonly state = signal<SubmitState>('idle');
   /** Bumped on every submit attempt so OnPush re-renders touched/invalid state. */
   private readonly attempt = signal(0);
@@ -161,6 +174,15 @@ export class ContactComponent {
     message: ['', Validators.required],
     _gotcha: [''],
   });
+
+  constructor() {
+    // A CTA elsewhere on the page (e.g. #normativa) can preselect "Servicio de interés".
+    effect(() => {
+      const index = this.intent.serviceIndex();
+      const option = index === null ? undefined : this.f.serviceOptions[index];
+      if (option) this.form.controls.service.setValue(option);
+    });
+  }
 
   /** Show an error only once the user has left the field (or tried to submit), like :user-invalid. */
   protected showError(name: FieldName): boolean {

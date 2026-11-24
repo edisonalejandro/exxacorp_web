@@ -7,7 +7,9 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
   template: `
     <span class="inline-flex items-center gap-2.5">
       <img
-        src="/logo/octopus-serious-final.png"
+        src="/logo/octopus-mark.webp"
+        width="96"
+        height="108"
         alt="Exxacorp"
         [style.width.px]="size()"
         [style.height.px]="size()"

@@ -53,6 +53,13 @@ const REGULATORY_OPTION = 3;
                 }
               </ul>
 
+              <div class="mt-6 rounded-xl border-l-2 border-violet-500 bg-violet-100/50 px-4 py-3.5">
+                <p class="text-xs font-semibold tracking-wide text-violet-700 uppercase">
+                  {{ i18n.content().regulation.keyPointLabel }} · <span class="normal-case">{{ law.keyPoint.article }}</span>
+                </p>
+                <p class="mt-1.5 text-sm leading-relaxed text-ink-900">{{ law.keyPoint.text }}</p>
+              </div>
+
               <div class="mt-6 border-t border-ink-900/[0.08] pt-6">
                 <h4 class="text-xs font-semibold tracking-wide text-violet-700 uppercase">{{ i18n.content().regulation.helpLabel }}</h4>
                 <ul class="mt-3 space-y-2.5">

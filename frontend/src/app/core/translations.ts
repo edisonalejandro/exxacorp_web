@@ -20,6 +20,8 @@ export interface LawItem {
   authority: string;
   appliesTo: string;
   obligations: string[];
+  /** El argumento legal más directo para el servicio, citando el artículo. */
+  keyPoint: { article: string; text: string };
   help: string[];
 }
 
@@ -70,6 +72,7 @@ export interface SiteContent {
     deadlineAfter: string;
     appliesToLabel: string;
     obligationsLabel: string;
+    keyPointLabel: string;
     helpLabel: string;
     laws: LawItem[];
     frameworks: string;
@@ -256,6 +259,7 @@ const es: SiteContent = {
     appliesToLabel: 'Aplica a',
     obligationsLabel: 'Qué exige',
     helpLabel: 'Cómo te ayudamos',
+    keyPointLabel: 'Por qué importa',
     laws: [
       {
         code: 'Ley 21.663',
@@ -268,6 +272,10 @@ const es: SiteContent = {
           'OIV: planes de continuidad operacional y de ciberseguridad certificados',
           'Multas de hasta 20.000 UTM, y hasta 40.000 UTM para OIV',
         ],
+        keyPoint: {
+          article: 'Art. 8 letra d)',
+          text: 'La ley exige a los OIV revisiones, ejercicios y simulacros continuos de sus redes y sistemas. Un pentest periódico es la forma de cumplirlo con evidencia.',
+        },
         help: [
           'Diagnóstico de brechas frente a la ley',
           'Hardening y pentesting para cerrar los controles técnicos',
@@ -285,6 +293,10 @@ const es: SiteContent = {
           'Evaluación de impacto previa para tratamientos de alto riesgo',
           'Multas de hasta 20.000 UTM; en reincidencia, hasta el 4% de los ingresos anuales',
         ],
+        keyPoint: {
+          article: 'Art. 14 quinquies',
+          text: 'Ante un incidente, tu empresa debe demostrar que sus medidas de seguridad existían y funcionaban. Nuestros informes y el retest son esa prueba.',
+        },
         help: [
           'Mapeo de dónde viven tus datos personales',
           'Controles de acceso, cifrado y hardening de los sistemas que los guardan',
@@ -512,6 +524,7 @@ const en: SiteContent = {
     appliesToLabel: 'Applies to',
     obligationsLabel: 'What it requires',
     helpLabel: 'How we help',
+    keyPointLabel: 'Why it matters',
     laws: [
       {
         code: 'Ley 21.663',
@@ -524,6 +537,10 @@ const en: SiteContent = {
           'OIV: certified business continuity and cybersecurity plans',
           'Fines of up to 20,000 UTM, and up to 40,000 UTM for OIV',
         ],
+        keyPoint: {
+          article: 'Art. 8(d)',
+          text: 'The law requires OIV to run continuous reviews, exercises and drills on their networks and systems. Regular pentesting is how you meet it with evidence.',
+        },
         help: [
           'Gap assessment against the law',
           'Hardening and pentesting to close the technical controls',
@@ -541,6 +558,10 @@ const en: SiteContent = {
           'Prior impact assessment for high-risk processing',
           'Fines of up to 20,000 UTM; for repeat offenses, up to 4% of annual revenue',
         ],
+        keyPoint: {
+          article: 'Art. 14 quinquies',
+          text: 'After an incident, your company must prove its security measures existed and worked. Our reports and retest are that proof.',
+        },
         help: [
           'Mapping where your personal data lives',
           'Access controls, encryption and hardening of the systems that store it',

@@ -37,7 +37,7 @@ src/app/
 
 El aviso de la Ley 21.719 en `#normativa` cambia solo de "entra en vigencia" a "vigente desde" a partir de `LEY_21719_IN_FORCE` (`core/config.ts`): 15-10-2027, fijada por la Ley 21.855 (D.O. 23-11-2026), que postergó el 1-12-2026 original. Las obligaciones y multas de `#normativa` se revisaron contra los textos de BCN LeyChile en noviembre de 2026 (21.663 arts. 4, 8, 9 y 40; 21.719 arts. 14 quinquies, 14 sexies, 15 ter, 35 y 38).
 
-SEO: meta tags, Open Graph (`public/og-image.png`), JSON-LD, `robots.txt` y `sitemap.xml` apuntan a `https://exxacorp.com` (dominio principal; también tenemos `exxacorp.cl`, que debe redirigir con 301 al `.com` desde la configuración de dominios de Vercel para no duplicar contenido). El sitio se renderiza solo en el navegador (sin prerender todavía).
+SEO: meta tags, Open Graph (`public/og-image.png`), JSON-LD, `robots.txt` y `sitemap.xml` apuntan a `https://www.exxacorp.com` (dominio principal; Vercel redirige `exxacorp.com` → `www`. `exxacorp.cl` hoy sirve el mismo sitio en `www.exxacorp.cl`: conviene redirigirlo al `.com` desde Vercel → Settings → Domains). El sitio se renderiza solo en el navegador (sin prerender todavía).
 
 ### Idioma (ES/EN)
 Todo el copy vive en `translations.ts` como objeto tipado por idioma (no hay claves sueltas tipo `t('a.b.c')`). El toggle está en el header; el idioma persiste en `localStorage` (`exxacorp-lang`) y por defecto se autodetecta según el navegador.
